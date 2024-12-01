@@ -1,7 +1,7 @@
 <svelte:head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
   <title>Logo Generator</title>
   <link rel="shortcut icon" href="/favicon.ico">
 </svelte:head>
@@ -17,8 +17,11 @@
   onMount(async () => {
     // フォントの読み込みを待つ
     await document.fonts.ready;
-    // Dosisフォントが特に読み込まれるのを確認
-    await document.fonts.load('700 10px "Dosis"');
+    // 両方のフォントが読み込まれるのを確認
+    await Promise.all([
+      document.fonts.load('700 10px "Dosis"'),
+      document.fonts.load('700 10px "M PLUS Rounded 1c"')
+    ]);
     
     fontLoaded = true;
     ctx = canvas.getContext('2d', { alpha: true });
@@ -28,7 +31,7 @@
   function generateLogo(forExport = false) {
     if (!ctx || !fontLoaded) return;
 
-    ctx.font = '700 80px "Dosis"';
+    ctx.font = '700 80px "Dosis", "M PLUS Rounded 1c", sans-serif';
     const text1Metrics = ctx.measureText(text1);
     const text2Metrics = ctx.measureText(text2);
     const spacing = 15;
@@ -56,7 +59,7 @@
     const y = (canvas.height - textHeight) / 2;
     const bubbleCenterY = y + textHeight / 2;
 
-    ctx.font = '700 80px "Dosis"';
+    ctx.font = '700 80px "Dosis", "M PLUS Rounded 1c", sans-serif';
 
     ctx.beginPath();
     ctx.moveTo(x + cornerRadius, y);
@@ -164,7 +167,7 @@
   }
 
   :global(.dosis-logo) {
-    font-family: "Dosis", sans-serif;
+    font-family: "Dosis", "M PLUS Rounded 1c", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
