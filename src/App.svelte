@@ -12,14 +12,21 @@
   let text2 = 'CHAT';
   let canvas;
   let ctx;
+  let fontLoaded = false;
 
-  onMount(() => {
+  onMount(async () => {
+    // フォントの読み込みを待つ
+    await document.fonts.ready;
+    // Dosisフォントが特に読み込まれるのを確認
+    await document.fonts.load('700 10px "Dosis"');
+    
+    fontLoaded = true;
     ctx = canvas.getContext('2d', { alpha: true });
     generateLogo(false);
   });
 
   function generateLogo(forExport = false) {
-    if (!ctx) return;
+    if (!ctx || !fontLoaded) return;
 
     ctx.font = '700 80px "Dosis"';
     const text1Metrics = ctx.measureText(text1);
@@ -38,7 +45,6 @@
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // プレビュー時のみ白背景を描画
     if (!forExport) {
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -52,7 +58,6 @@
 
     ctx.font = '700 80px "Dosis"';
 
-    // メイン吹き出しの描画
     ctx.beginPath();
     ctx.moveTo(x + cornerRadius, y);
     ctx.lineTo(x + totalWidth - cornerRadius, y);
@@ -76,13 +81,11 @@
     ctx.strokeStyle = '#000000';
     ctx.stroke();
 
-    // VR部分の描画
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(text1, x + leftPadding, bubbleCenterY);
 
-    // CHAT部分の背景（黒）
     const chatX = x + leftPadding + text1Metrics.width + spacing;
     const chatBoxHeight = textHeight/1.4;
     const chatY = bubbleCenterY - chatBoxHeight/2 - 5;
@@ -104,7 +107,6 @@
     ctx.fillStyle = '#000000';
     ctx.fill();
 
-    // CHAT部分のテキスト（白）
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText(text2, chatX + 10, bubbleCenterY);
   }
@@ -118,7 +120,7 @@
     generateLogo(false);
   }
 
-  $: if (ctx && (text1 || text2)) generateLogo(false);
+  $: if (ctx && fontLoaded && (text1 || text2)) generateLogo(false);
 </script>
 
 <main>
@@ -139,10 +141,15 @@
     >
   </div>
   
+  {#if !fontLoaded}
+    <div class="loading">フォントを読み込み中...</div>
+  {/if}
+  
   <canvas 
     bind:this={canvas} 
     on:click={downloadImage}
     title="クリックしてダウンロード"
+    class:hidden={!fontLoaded}
   ></canvas>
 
   <p class="dosis-logo">↑ キャンバスをクリックするとPNG画像をダウンロードできます</p>
@@ -206,5 +213,15 @@
   p {
     color: #a9b1d6;
     font-size: 14px;
+  }
+
+  .loading {
+    color: #a9b1d6;
+    margin: 20px 0;
+    font-size: 16px;
+  }
+
+  .hidden {
+    display: none;
   }
 </style>
