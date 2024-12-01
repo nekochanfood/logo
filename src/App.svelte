@@ -41,7 +41,7 @@
     const containsNonAscii_text2 = /[^\x00-\x7F]/.test(text2);
 
     const leftPadding = (text1 == "")?15:20;       
-    const rightPadding = (text2 == "")?-25:-10;
+    const rightPadding = (text2 == "")?-25:-12;   
     const bottomPadding = -30;  
     const topPadding = containsNonAscii_text2?55:45;     
     const totalTextWidth = text1Metrics.width + text2Metrics.width + spacing;
@@ -108,7 +108,7 @@
     const chatX = x + leftPadding + text1Metrics.width + spacing;
     const chatBoxHeight = containsNonAscii_text2?(textHeight/1.35):(textHeight/1.45);
     const chatY = bubbleCenterY - chatBoxHeight/2 - 5;
-    const chatBoxWidth = text2Metrics.width + 12;
+    const chatBoxWidth = text2Metrics.width + 8;
     const chatCornerRadius = 12;
 
     if(text2 != ""){
