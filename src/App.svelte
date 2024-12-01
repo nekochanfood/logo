@@ -31,17 +31,21 @@
   function generateLogo(forExport = false) {
     if (!ctx || !fontLoaded) return;
 
-    ctx.font = '700 80px "Dosis", "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '700 92px "Dosis", "M PLUS Rounded 1c", sans-serif';
     const text1Metrics = ctx.measureText(text1);
     const text2Metrics = ctx.measureText(text2);
-    const spacing = 15;
+    const spacing = 6;
     
-    const leftPadding = 20;    
-    const rightPadding = 40;   
+    // detect use of non-ASCII characters to avoid overflow
+    const containsNonAscii_text1 = /[^\x00-\x7F]/.test(text1);
+    const containsNonAscii_text2 = /[^\x00-\x7F]/.test(text2);
+
+    const leftPadding = (text1 == "")?15:20;       
+    const rightPadding = (text2 == "")?-25:-10;
     const bottomPadding = -30;  
-    const topPadding = 50;     
+    const topPadding = containsNonAscii_text2?55:45;     
     const totalTextWidth = text1Metrics.width + text2Metrics.width + spacing;
-    const totalWidth = totalTextWidth + leftPadding + rightPadding;
+    const totalWidth = totalTextWidth + leftPadding + rightPadding + 42;
     
     canvas.width = totalWidth + 80;
     canvas.height = 200;
@@ -53,14 +57,18 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    const cornerRadius = 15;
-    const textHeight = 90 + topPadding + bottomPadding;
+    // overall offset
+    const offsetY = -20;
+
+    const cornerRadius = 18;
+    const textHeight = 100 + topPadding + bottomPadding;
     const x = (canvas.width - totalWidth) / 2;
-    const y = (canvas.height - textHeight) / 2;
-    const bubbleCenterY = y + textHeight / 2;
+    const y = (canvas.height - textHeight) / 2 + offsetY;
+    const bubbleCenterY = y + textHeight / 2 + 4;
 
-    ctx.font = '700 80px "Dosis", "M PLUS Rounded 1c", sans-serif';
+    ctx.font = '700 92px "Dosis", "M PLUS Rounded 1c", sans-serif';
 
+    // left top to right bottom
     ctx.beginPath();
     ctx.moveTo(x + cornerRadius, y);
     ctx.lineTo(x + totalWidth - cornerRadius, y);
@@ -68,14 +76,22 @@
     ctx.lineTo(x + totalWidth, y + textHeight - cornerRadius);
     ctx.quadraticCurveTo(x + totalWidth, y + textHeight, x + totalWidth - cornerRadius, y + textHeight);
     
-    ctx.lineTo(x + totalWidth - cornerRadius - 5, y + textHeight);
-    ctx.lineTo(x + totalWidth - cornerRadius - 5, y + textHeight + 30);
-    ctx.lineTo(x + totalWidth - cornerRadius - 40, y + textHeight);
+    // Drawing the tail
+    const tailHeight = 30;
+    const tailBeginX = 5;
+
+    ctx.lineTo(x + totalWidth - cornerRadius - 5 + tailBeginX, y + textHeight);
+    ctx.lineTo(x + totalWidth - cornerRadius - 5 + tailBeginX, y + textHeight + tailHeight + 5);
+    //  Rounding the tail
+    ctx.quadraticCurveTo(x + totalWidth - cornerRadius - 5 + tailBeginX, y + textHeight + tailHeight + 20,x + totalWidth - cornerRadius - 5 -15 + tailBeginX, y + textHeight + tailHeight);
+    ctx.lineTo(x + totalWidth - cornerRadius - 45 + tailBeginX, y + textHeight);
     
+    // tail to left bottom
     ctx.lineTo(x + cornerRadius, y + textHeight);
     ctx.quadraticCurveTo(x, y + textHeight, x, y + textHeight - cornerRadius);
     ctx.lineTo(x, y + cornerRadius);
     ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
+
     ctx.closePath();
 
     ctx.fillStyle = '#FFFFFF';
@@ -90,28 +106,33 @@
     ctx.fillText(text1, x + leftPadding, bubbleCenterY);
 
     const chatX = x + leftPadding + text1Metrics.width + spacing;
-    const chatBoxHeight = textHeight/1.4;
+    const chatBoxHeight = containsNonAscii_text2?(textHeight/1.35):(textHeight/1.45);
     const chatY = bubbleCenterY - chatBoxHeight/2 - 5;
-    const chatBoxWidth = text2Metrics.width + 20;
-    const chatCornerRadius = 10;
+    const chatBoxWidth = text2Metrics.width + 12;
+    const chatCornerRadius = 12;
 
-    ctx.beginPath();
-    ctx.moveTo(chatX + chatCornerRadius, chatY);
-    ctx.lineTo(chatX + chatBoxWidth - chatCornerRadius, chatY);
-    ctx.quadraticCurveTo(chatX + chatBoxWidth, chatY, chatX + chatBoxWidth, chatY + chatCornerRadius);
-    ctx.lineTo(chatX + chatBoxWidth, chatY + chatBoxHeight - chatCornerRadius);
-    ctx.quadraticCurveTo(chatX + chatBoxWidth, chatY + chatBoxHeight, chatX + chatBoxWidth - chatCornerRadius, chatY + chatBoxHeight);
-    ctx.lineTo(chatX + chatCornerRadius, chatY + chatBoxHeight);
-    ctx.quadraticCurveTo(chatX, chatY + chatBoxHeight, chatX, chatY + chatBoxHeight - chatCornerRadius);
-    ctx.lineTo(chatX, chatY + chatCornerRadius);
-    ctx.quadraticCurveTo(chatX, chatY, chatX + chatCornerRadius, chatY);
-    ctx.closePath();
+    if(text2 != ""){
+      ctx.beginPath();
+      
+      ctx.moveTo(chatX + chatCornerRadius, chatY);
+      ctx.lineTo(chatX + chatBoxWidth - chatCornerRadius, chatY);
+      ctx.quadraticCurveTo(chatX + chatBoxWidth, chatY, chatX + chatBoxWidth, chatY + chatCornerRadius);
+      ctx.lineTo(chatX + chatBoxWidth, chatY + chatBoxHeight - chatCornerRadius);
+      ctx.quadraticCurveTo(chatX + chatBoxWidth, chatY + chatBoxHeight, chatX + chatBoxWidth - chatCornerRadius, chatY + chatBoxHeight);
+      ctx.lineTo(chatX + chatCornerRadius, chatY + chatBoxHeight);
+      ctx.quadraticCurveTo(chatX, chatY + chatBoxHeight, chatX, chatY + chatBoxHeight - chatCornerRadius);
+      ctx.lineTo(chatX, chatY + chatCornerRadius);
+      ctx.quadraticCurveTo(chatX, chatY, chatX + chatCornerRadius, chatY);
+      ctx.closePath();
     
-    ctx.fillStyle = '#000000';
-    ctx.fill();
+      ctx.fillStyle = '#000000';
+      ctx.fill();
 
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(text2, chatX + 10, bubbleCenterY);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(text2, chatX + 4, bubbleCenterY);
+    }
+    
+    
   }
 
   function downloadImage() {
