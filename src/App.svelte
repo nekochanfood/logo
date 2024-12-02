@@ -14,6 +14,11 @@
   let ctx;
   let fontLoaded = false;
 
+  // detect use of webkit
+  function isWebKit() {
+    return navigator.vendor && navigator.vendor.includes('Apple');
+  }
+
   onMount(async () => {
     // フォントの読み込みを待つ
     await document.fonts.ready;
@@ -60,6 +65,9 @@
     // overall offset
     const offsetY = -20;
 
+    // text offset (for fixing the visual error in webkit)
+    const textOffsetY = isWebKit()?-6:0;
+
     const cornerRadius = 18;
     const textHeight = 100 + topPadding + bottomPadding;
     const x = (canvas.width - totalWidth) / 2;
@@ -103,7 +111,7 @@
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text1, x + leftPadding, bubbleCenterY);
+    ctx.fillText(text1, x + leftPadding, bubbleCenterY + textOffsetY);
 
     const chatX = x + leftPadding + text1Metrics.width + spacing;
     const chatBoxHeight = containsNonAscii_text2?(textHeight/1.35):(textHeight/1.45);
@@ -129,7 +137,7 @@
       ctx.fill();
 
       ctx.fillStyle = '#FFFFFF';
-      ctx.fillText(text2, chatX + 4, bubbleCenterY);
+      ctx.fillText(text2, chatX + 4, bubbleCenterY + textOffsetY);
     }
     
     
