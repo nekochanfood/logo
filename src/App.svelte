@@ -158,20 +158,20 @@
 <main>
   <div class="flex flex-col items-center justify-center gap-8">
     <div>
-      <p class="text-2xl md:text-4xl text-center font-semibold">VRSNS風ロゴジェネレーター</p>
+      <p class="text-2xl md:text-5xl text-center font-semibold">VRSNS風ロゴジェネレーター</p>
     </div>
-    <div class="flex flex-col md:flex-row gap-2 md:gap-6 w-full">
+    <div class="flex flex-col md:flex-row gap-2 md:gap-6 md:max-w-lg w-full">
       <input 
         type="text" 
         bind:value={text1} 
         placeholder="VR"
-        class="bg-color-0 mt-1 px-3 py-2 border shadow-sm border-color-1 focus:outline-none focus:border-color-1 focus:ring-color-1 block w-full rounded-md sm:text-sm focus:ring-1"
+        class="bg-color-0 mt-1 px-3 py-2 border shadow-sm border-color-1 focus:outline-none focus:border-color-1 focus:ring-color-1 w-full block rounded-md sm:text-sm focus:ring-1"
       >
       <input 
         type="text" 
         bind:value={text2} 
         placeholder="CHAT"
-        class="bg-color-0 mt-1 px-3 py-2 border shadow-sm border-color-1 focus:outline-none focus:border-color-1 focus:ring-color-1 block w-full rounded-md sm:text-sm focus:ring-1"
+        class="bg-color-0 mt-1 px-3 py-2 border shadow-sm border-color-1 focus:outline-none focus:border-color-1 focus:ring-color-1 w-full block rounded-md sm:text-sm focus:ring-1"
       >
     </div>
     <div class="md:w-auto ">
