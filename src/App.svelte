@@ -190,37 +190,6 @@
     </div>
     <p class="text-sm md:text-xl">↑<br>キャンバスをクリックするとPNG画像をダウンロードできます</p>
   </div>
-  <!--
-  <h1 class="dosis-logo">VRSNS風ロゴジェネレーター</h1>
-  
-  <div class="input-group">
-    <input 
-      type="text" 
-      bind:value={text1} 
-      placeholder="VR"
-      class="dosis-logo"
-    >
-    <input 
-      type="text" 
-      bind:value={text2} 
-      placeholder="CHAT"
-      class="dosis-logo"
-    >
-  </div>
-  
-  {#if !fontLoaded}
-    <div class="loading">フォントを読み込み中...</div>
-  {/if}
-  
-  <canvas 
-    bind:this={canvas} 
-    on:click={downloadImage}
-    title="クリックしてダウンロード"
-    class:hidden={!fontLoaded}
-  ></canvas>
-
-  <p class="dosis-logo">↑ キャンバスをクリックするとPNG画像をダウンロードできます</p>
-  -->
 </main>
 
 <style>
