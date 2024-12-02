@@ -31,7 +31,6 @@
     fontLoaded = true;
     ctx = canvas.getContext('2d', { alpha: true });
     generateLogo(false);
-    console.log('WebkitAppearance' in document.documentElement.style);
   });
 
   function generateLogo(forExport = false) {
