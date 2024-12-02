@@ -16,7 +16,7 @@
 
   // detect use of webkit
   function isWebKit() {
-    return 'WebkitAppearance' in document.documentElement.style;
+    return navigator.vendor && navigator.vendor.includes('Apple');
   }
 
   onMount(async () => {
@@ -31,6 +31,7 @@
     fontLoaded = true;
     ctx = canvas.getContext('2d', { alpha: true });
     generateLogo(false);
+    console.log('WebkitAppearance' in document.documentElement.style);
   });
 
   function generateLogo(forExport = false) {
